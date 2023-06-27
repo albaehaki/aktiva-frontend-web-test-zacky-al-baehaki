@@ -22,8 +22,8 @@ export default defineConfig({
   },
   define: {
     'process.env': {
-      VITE_YELP_API_TOKEN: JSON.stringify('UMJ-jTpabefy4TjFStJoCVLvLW2DW9w9v_HNMfnj0zDYK1aOKUvYoxZzooTRsG5EpPExQ1JrI48DJU_PHaLMYGzOakCljxRPxATlGH0DDWrTMRfD4d_CiHNVDvGHZHYx'),
-      VITE_YELP_API_URL: JSON.stringify('https://api.yelp.com'),
+      VITE_YELP_API_TOKEN: JSON.stringify('your token'),
+      VITE_YELP_API_URL: JSON.stringify('url api'),
     },
   },
 })
