@@ -1,4 +1,4 @@
-import { useMapEvent } from 'react-leaflet/hooks'
+import { useMapEvent, useMap } from 'react-leaflet/hooks'
 
 // redux
 import { useAppDispatch, useAppSelector } from "../app/hooks"

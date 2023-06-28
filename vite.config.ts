@@ -41,7 +41,7 @@ export default (({ command, mode }) => {
       open: true,
     },
     build: {
-      outDir: "dist",
+      outDir: "build",
       sourcemap: true,
     },
     test: {
