@@ -36,6 +36,7 @@ function Home() {
   }, [dispacth])
   
 console.log(data)
+console.log(import.meta.env.VITE_YELP_API_TOKEN)
   return (
     <MapContainer center={position} zoom={13} scrollWheelZoom={false} style={{ width: '100vw', height: '100vh' }} >
       <MyComponent position={position} setPosition={setPosition}/>

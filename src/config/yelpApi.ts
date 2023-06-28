@@ -1,7 +1,4 @@
 import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const apiKey = import.meta.env.VITE_YELP_API_TOKEN
 const apiurl = import.meta.env.VITE_YELP_API_URL
