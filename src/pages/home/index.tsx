@@ -9,50 +9,73 @@ import { useMapEvents } from "react-leaflet"
 import PinMap from "../../components/pinMap"
 import LocationMarker from "../../components/getCurrentLocation"
 
+// ant Design
+import { Layout, Space } from "antd"
+
+const { Header, Footer, Sider, Content } = Layout
 
 // icon
-import { SearchOutlined, AimOutlined } from "@ant-design/icons"
+import { SearchOutlined, AimOutlined, LaptopOutlined } from "@ant-design/icons"
 
 // redux
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { fetchData } from "../../features/yelpApiSlice/yelpApiSlice"
-import { addNewPosition } from '../../features/positionSlice/positionSlice';
+import { addNewPosition } from "../../features/positionSlice/positionSlice"
 
 function Home() {
-  const mapRef = useRef(null);
+  const mapRef = useRef(null)
   const position = useAppSelector((state) => state.reducer.position)
   const dispacth = useAppDispatch()
+  const dataBusiness = useAppSelector((state) => state.reducer.data.data) as any
 
   useEffect(() => {
-    dispacth(fetchData({ latitude: position[0], longitude: position[1] }))
-    const map = mapRef.current;
-    // if(map){
-    //   map.flyTo(position, map.getZoom());
-    // }
+    dispacth(fetchData({ latitude: position[0], longitude: position[1], radius: 1000 }))
+  
   }, [dispacth])
 
-  
-
+  useEffect(() => {
+    // Logika atau pemanggilan fungsi lain yang berkaitan dengan perubahan dataBusiness
+  }, [dataBusiness]);
+console.log(dataBusiness)
   return (
     <>
-      
-
-      <MapContainer
-        center={position}
-        zoom={5}
-        scrollWheelZoom={false}
-        style={{ width: "100vw", height: "100vh" }}
-      >
-        <PinMap />
-        <LocationMarker />
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={position}>
-          <Popup>{`${position[0]}, ${position[1]}`}</Popup>
-        </Marker>
-      </MapContainer>
+      <Layout>
+        <Header></Header>
+        <Layout hasSider>
+          <Sider width={200} style={{ overflow: 'auto', height: '100vh', left: 0 }}>
+            {/* {dataBusiness?.businesses.map((item: any, i: number) =>(
+              <p
+                key={item.id}
+                style={{
+                background: 'white',
+                marginLeft: '10px',
+                marginRight: '10px',
+                padding: '10px',
+              }}>{item.name}</p>
+            ))
+            // : ''
+            } */}
+          </Sider>
+          <Content style={{ height: '100vh' }}>
+            <MapContainer
+              center={position}
+              zoom={5}
+              scrollWheelZoom={false}
+              style={{ width: "100%", height: "100%" }}
+            >
+              <PinMap />
+              <LocationMarker />
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={position}>
+                <Popup>{`${position[0]}, ${position[1]}`}</Popup>
+              </Marker>
+            </MapContainer>
+          </Content>
+        </Layout>
+      </Layout>
     </>
   )
 }
