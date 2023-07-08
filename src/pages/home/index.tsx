@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react"
+import ReactDOMServer from "react-dom/server";
 
 // Leaflet
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
+import Leaflet from "leaflet";
 import { useMapEvents } from "react-leaflet"
 
 // components
@@ -15,17 +17,30 @@ import { Layout, Space } from "antd"
 const { Header, Footer, Sider, Content } = Layout
 
 // icon
-import { SearchOutlined, AimOutlined, LaptopOutlined } from "@ant-design/icons"
+import { SearchOutlined, AimOutlined, LaptopOutlined, EnvironmentOutlined } from "@ant-design/icons"
 
 // redux
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { fetchData } from "../../features/yelpApiSlice/yelpApiSlice"
 import { addNewPosition } from "../../features/positionSlice/positionSlice"
 
+
+
+const aimIcon = ReactDOMServer.renderToString(<AimOutlined />);
+
+const aimIconUrl = `data:image/svg+xml;base64,${btoa(aimIcon)}`;
+
+export const newicon = new Leaflet.Icon({
+  iconUrl: aimIconUrl,
+  iconAnchor: [5, 55],
+  popupAnchor: [10, -44],
+  iconSize: [25, 55]
+});
+
 function Home() {
   const mapRef = useRef(null)
   const position = useAppSelector((state) => state.reducer.position)
-  const dispacth = useAppDispatch()
+  const dispacth = useAppDispatch() 
   const dataBusiness = useAppSelector((state) => state.reducer.data.data) as any
 
   useEffect(() => {
@@ -66,10 +81,10 @@ console.log(dataBusiness)
               <PinMap />
               <LocationMarker />
               <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={position}>
+              <Marker icon={newicon} position={position}>
                 <Popup>{`${position[0]}, ${position[1]}`}</Popup>
               </Marker>
             </MapContainer>
