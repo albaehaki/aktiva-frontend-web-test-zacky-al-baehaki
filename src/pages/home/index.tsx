@@ -28,10 +28,10 @@ import { addNewPosition } from "../../features/positionSlice/positionSlice"
 
 const aimIcon = ReactDOMServer.renderToString(<AimOutlined />);
 
-const aimIconUrl = `data:image/svg+xml;base64,${btoa(aimIcon)}`;
+// const aimIconUrl = `data:image/svg+xml;base64,${btoa(aimIcon)}`;
 
 export const newicon = new Leaflet.Icon({
-  iconUrl: aimIconUrl,
+  iconUrl: aimIcon,
   iconAnchor: [5, 55],
   popupAnchor: [10, -44],
   iconSize: [25, 55]
@@ -84,7 +84,7 @@ console.log(dataBusiness)
                 // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker icon={newicon} position={position}>
+              <Marker position={position}>
                 <Popup>{`${position[0]}, ${position[1]}`}</Popup>
               </Marker>
             </MapContainer>
