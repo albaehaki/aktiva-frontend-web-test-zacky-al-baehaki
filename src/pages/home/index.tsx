@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import ReactDOMServer from "react-dom/server";
+import ReactDOMServer, { renderToStaticMarkup } from "react-dom/server";
 
 // Leaflet
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
@@ -18,6 +18,7 @@ const { Header, Footer, Sider, Content } = Layout
 
 // icon
 import { SearchOutlined, AimOutlined, LaptopOutlined, EnvironmentOutlined } from "@ant-design/icons"
+import MarkerIcon from "../../image/markerIcon.png";
 
 // redux
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
@@ -26,16 +27,28 @@ import { addNewPosition } from "../../features/positionSlice/positionSlice"
 
 
 
-const aimIcon = ReactDOMServer.renderToString(<AimOutlined />);
+// const aimIcon = ReactDOMServer.renderToString(<AimOutlined />);
 
 // const aimIconUrl = `data:image/svg+xml;base64,${btoa(aimIcon)}`;
 
 export const newicon = new Leaflet.Icon({
-  iconUrl: aimIcon,
-  iconAnchor: [5, 55],
-  popupAnchor: [10, -44],
-  iconSize: [25, 55]
+  iconUrl: MarkerIcon,
+  iconAnchor: [15, 25],
+  popupAnchor: [-2, -20],
+  iconSize: [25, 25]
 });
+
+// const antIcon = <AimOutlined />;
+// const antIconMarkup = renderToStaticMarkup(antIcon);
+
+// export const newicon = new Leaflet.divIcon({
+//   className: '',
+//   iconAnchor: [12, 25],
+//   labelAnchor: [-6, 0],
+//   popupAnchor: [0, -15],
+//   iconSize: [25, 41],
+//   html: 
+// });
 
 function Home() {
   const mapRef = useRef(null)
@@ -84,7 +97,7 @@ console.log(dataBusiness)
                 // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={position}>
+              <Marker position={position} icon={newicon}>
                 <Popup>{`${position[0]}, ${position[1]}`}</Popup>
               </Marker>
             </MapContainer>
