@@ -23,7 +23,7 @@ export const fetchData = createAsyncThunk(
       return response.data;
     } catch (error: any) {
         if (axios.isAxiosError(error) && error.response) {
-            console.log( error.response.data);
+            console.log( error.response.data, "ini dari redux");
         }
     }
   }
@@ -45,6 +45,7 @@ const businessSlice = createSlice({
       })
       .addCase(fetchData.rejected, (state, action) => {
         state.loading = false;
+        // console.log(action, "ini dari handle error")
         // state.error = action.error?.message ?? null;
       });
   },

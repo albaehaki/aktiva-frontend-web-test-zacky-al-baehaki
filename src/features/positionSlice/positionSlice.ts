@@ -5,7 +5,7 @@ interface positionSliceType {
     position: positionType
 }
 
-const initialState: positionType = [0, 0]
+const initialState: positionType = [1.3045137436059147, 103.81256103515626]
 
 
 
