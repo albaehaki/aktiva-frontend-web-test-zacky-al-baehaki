@@ -28,11 +28,10 @@ import MarkerIcon from "../../image/markerIcon.png"
 // redux
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { fetchData } from "../../features/yelpApiSlice/yelpApiSlice"
-import { addNewPosition } from "../../features/positionSlice/positionSlice"
+import { addIdDetail } from "../../features/detailSlice/detailSlice"
 
-// const aimIcon = ReactDOMServer.renderToString(<AimOutlined />);
-
-// const aimIconUrl = `data:image/svg+xml;base64,${btoa(aimIcon)}`;
+// React router dom
+import { useNavigate, Route } from 'react-router-dom';
 
 export const newicon = new Leaflet.Icon({
   iconUrl: MarkerIcon,
@@ -41,40 +40,32 @@ export const newicon = new Leaflet.Icon({
   iconSize: [25, 25],
 })
 
-// const antIcon = <AimOutlined />;
-// const antIconMarkup = renderToStaticMarkup(antIcon);
 
-// export const newicon = new Leaflet.divIcon({
-//   className: '',
-//   iconAnchor: [12, 25],
-//   labelAnchor: [-6, 0],
-//   popupAnchor: [0, -15],
-//   iconSize: [25, 41],
-//   html:
-// });
 
 function Home() {
   const mapRef = useRef(null)
   const position = useAppSelector((state) => state.reducer.position)
   const dispacth = useAppDispatch()
   const dataBusiness = useAppSelector((state) => state.reducer.data.data) as any
+  const data = useAppSelector((state) => state.reducer.data) as any
+
+  // react router dom
+  const navigate = useNavigate()
 
   useEffect(() => {
     dispacth(
-      fetchData({
+      fetchData({endpoint: "search", params:{
         latitude: position[0],
         longitude: position[1],
         radius: 1000,
-      }),
+      }})
     )
   }, [dispacth, position])
 
   useEffect(() => {
     // Logika atau pemanggilan fungsi lain yang berkaitan dengan perubahan dataBusiness
   }, [dataBusiness])
-  console.log(dataBusiness.businesses)
-  console.log(dataBusiness.businesses.filter((d: any) => d.id === "JQhiHB0luuEs1FEc1oEFtw"))
-  console.log(position)
+ 
   return (
     <>
       <Layout>
@@ -85,20 +76,25 @@ function Home() {
             style={{ overflow: "auto", height: "100vh", left: 0 }}
           >
             {
-              dataBusiness?.businesses.map((item: any, i: number) => (
-                <p
+             data.error? "" : dataBusiness?.businesses && dataBusiness?.businesses.map((item: any, i: number) => (
+                <button
+                onClick={() => {
+                  dispacth(addIdDetail(item.id))
+                  navigate("/detail")
+                }}
                   key={item.id}
                   style={{
                     background: "white",
-                    marginLeft: "10px",
-                    marginRight: "10px",
+                    // marginLeft: "10px",
+                    // marginRight: "10px",
                     padding: "10px",
+                    width: "100%",
                   }}
                 >
                   {item.name}
-                </p>
+                </button>
               ))
-              // : ''
+             
             }
             {dataBusiness?.businesses.length > 0 ? (
               ""

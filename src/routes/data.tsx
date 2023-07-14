@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import { Home, Surah } from "../pages";
+import { Home, Detail } from "../pages";
 
 export type dataRoutesType = {
     id: number
@@ -15,7 +15,7 @@ export const dataRoutes: dataRoutesType[] = [
     },
     {
         id: 1,
-        element: <Surah />,
-        route: "/surah",
+        element: <Detail />,
+        route: "/detail",
     },
 ]

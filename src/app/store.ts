@@ -2,10 +2,12 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
 import { combineReducers } from "redux";
 import businessReducer from "../features/yelpApiSlice/yelpApiSlice"
 import positionReducer from "../features/positionSlice/positionSlice"
+import detailReducer from "../features/detailSlice/detailSlice"
 
 const rootReducer = combineReducers({
   position: positionReducer,
   data: businessReducer,
+  detail: detailReducer,
 });
 
 

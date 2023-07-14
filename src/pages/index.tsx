@@ -1,2 +1,2 @@
 export { default as Home} from './home';
-export { default as Surah} from './detailBusiness';
+export { default as Detail} from './detailBusiness';
