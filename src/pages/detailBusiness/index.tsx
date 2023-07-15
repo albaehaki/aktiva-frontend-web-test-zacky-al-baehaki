@@ -7,14 +7,14 @@ import { fetchData } from "../../features/yelpApiSlice/yelpApiSlice"
 function Home() {
   const position = useAppSelector((state) => state.reducer.position)
   const dispacth = useAppDispatch()
-  const dataBusiness = useAppSelector((state) => state.reducer.data.data) as any
+  const data = useAppSelector((state) => state.reducer.data.data.dataDetail) as any
   const id = useAppSelector((state) => state.reducer.detail.id) 
 
   useEffect(() => {
     dispacth(fetchData({endpoint: id, params: {}}))
   }, [])
  
-  console.log(dataBusiness)
+  console.log(data)
   return (
     <div>Hallo ini halaman surah</div>
   )

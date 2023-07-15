@@ -3,14 +3,20 @@ import axios from 'axios';
 import api from '../../config/yelpApi';
 
 interface BusinessSlice {
-    data: null
+    data: {
+      dataBussiness: null
+      dataDetail: null
+    }
     loading: boolean
     error: boolean
     errorMessage: string | undefined
 }
 
 const initialState: BusinessSlice = {
-    data: null,
+    data: {
+      dataBussiness: null,
+      dataDetail: null
+    },
     loading: false,
     error: false,
     errorMessage: '',
@@ -20,16 +26,8 @@ const initialState: BusinessSlice = {
 export const fetchData = createAsyncThunk(
   'data/fetchData',
   async ({ endpoint, params }: { endpoint: string; params: any }) => {
-    // try {
       const response = await api.get('/v3/businesses/' + endpoint, { params });
       return response.data;
-    // } catch (error: any) {
-    //     // if (axios.isAxiosError(error) && error.response) {
-    //     //     console.log( error.response.data);
-    //     // }
-    //     // return isRejectedWithValue(error.message)
-    //     return isRejectedWithValue(null);
-    // }
   }
 );
 
@@ -45,12 +43,16 @@ const businessSlice = createSlice({
       })
       .addCase(fetchData.fulfilled, (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        if(action.payload.businesses){
+          state.data.dataBussiness = action.payload;
+        } else{
+          state.data.dataDetail = action.payload
+        }
         state.error = false;
       })
       .addCase(fetchData.rejected, (state, action) => {
         state.loading = false;
-        console.log(action, "ini dari handle error")
+        console.log(action)
         state.error = true;
         state.errorMessage = action.error.message;
       });

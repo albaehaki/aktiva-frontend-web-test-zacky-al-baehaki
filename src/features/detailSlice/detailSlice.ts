@@ -4,11 +4,15 @@ import { Detail } from "../../pages";
 
 interface detailType {
     id: string
+    dataDetail: object
 }
 
 const initialState: detailType = {
     id: "",
+    dataDetail: {}
 };
+
+
 
 const detailSlice = createSlice({
     name: "detail",

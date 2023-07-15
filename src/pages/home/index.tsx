@@ -46,7 +46,7 @@ function Home() {
   const mapRef = useRef(null)
   const position = useAppSelector((state) => state.reducer.position)
   const dispacth = useAppDispatch()
-  const dataBusiness = useAppSelector((state) => state.reducer.data.data) as any
+  const dataBusiness = useAppSelector((state) => state.reducer.data.data.dataBussiness) as any
   const data = useAppSelector((state) => state.reducer.data) as any
 
   // react router dom
@@ -66,6 +66,8 @@ function Home() {
     // Logika atau pemanggilan fungsi lain yang berkaitan dengan perubahan dataBusiness
   }, [dataBusiness])
  
+
+  console.log(dataBusiness)
   return (
     <>
       <Layout>
