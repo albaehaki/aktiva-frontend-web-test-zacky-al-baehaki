@@ -6,12 +6,30 @@ import { fetchData } from "../../features/yelpApiSlice/yelpApiSlice"
 
 // antDesign
 import { Row, Col, Space, Progress, Rate, Typography } from "antd"
-const { Text } = Typography
+const { Text, Title } = Typography
 
 // Leaflet
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 import Leaflet from "leaflet"
+
+// components
+import LocationMarker from "../../components/getCurrentLocation"
+
+// icon
+import MarkerIcon from "../../image/markerIcon.png"
+import {
+  SearchOutlined,
+  AimOutlined,
+  LaptopOutlined,
+  EnvironmentOutlined,
+} from "@ant-design/icons"
+export const newicon = new Leaflet.Icon({
+  iconUrl: MarkerIcon,
+  iconAnchor: [15, 25],
+  popupAnchor: [-2, -20],
+  iconSize: [25, 25],
+})
 
 // dummy data
 export const dataDummy: any = {
@@ -122,6 +140,16 @@ export const dataDummy: any = {
   transactions: [],
 }
 
+export const days = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+]
+
 function Home() {
   const position = useAppSelector((state) => state.reducer.position)
   const dispacth = useAppDispatch()
@@ -134,9 +162,38 @@ function Home() {
     dispacth(fetchData({ endpoint: id, params: {} }))
   }, [])
 
-  console.log(data)
+  // console.log(dataDummy.hours[0].open.map((hour: number) => hour))
+  // console.log(dataDummy.hours[0].open[1])
+  // console.log(dataDummy.hours[0].is_open_now)
   return (
     <div style={{ overflowX: "hidden" }}>
+      <Row style={{ margin: "20px" }}>
+        <Col></Col>
+        <Col style={{ display: "flex", justifyContent: "center" }} span={24}>
+          <Title
+            style={{
+              alignItems: "center",
+              alignContent: "middle",
+              textAlign: "center",
+            }}
+          >
+            {dataDummy.name}
+          </Title>
+
+          <span
+            style={{
+              padding: "3px",
+              // backgroundColor: "lightgreen",
+              borderRadius: "5px",
+              margin: "0px",
+              height: "20px",
+              backgroundColor: dataDummy.hours[0].is_open_now ? 'lightgreen' : 'red',
+            }}
+          >
+            {dataDummy.hours[0].is_open_now ? 'Open' : 'Closed'}
+          </span>
+        </Col>
+      </Row>
       <Row justify="center" style={{ padding: "16px" }} gutter={[16, 16]}>
         <Col span={12}>
           <div
@@ -254,7 +311,10 @@ function Home() {
             }}
           >
             <MapContainer
-              center={position}
+              center={[
+                dataDummy.coordinates.latitude,
+                dataDummy.coordinates.longitude,
+              ]}
               zoom={13}
               scrollWheelZoom={false}
               style={{ width: "100%", height: "100%", borderRadius: "25px" }}
@@ -268,11 +328,18 @@ function Home() {
                   dataDummy.coordinates.latitude,
                   dataDummy.coordinates.longitude,
                 ]}
+                icon={newicon}
               >
                 <Popup>
                   A pretty CSS3 popup. <br /> Easily customizable.
                 </Popup>
               </Marker>
+              <Marker position={position} icon={newicon}>
+                <Popup>
+                  A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>
+              </Marker>
+              <LocationMarker />
             </MapContainer>
           </div>
         </Col>
@@ -284,7 +351,7 @@ function Home() {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
               width: "100%",
-              height: "516px",
+              height: "100%",
               borderRadius: "25px",
               borderColor: "lightgray",
               border: "1px solid",
@@ -297,8 +364,8 @@ function Home() {
                   style={{
                     fontSize: "48px",
                     fontWeight: "bold",
-                    paddingRight: "10px",
                     paddingLeft: "20px",
+                    margin: "0px",
                   }}
                 >
                   {dataDummy.rating.toFixed(1)}{" "}
@@ -309,6 +376,7 @@ function Home() {
                   display: "flex",
                   flexDirection: "column",
                   margin: "0px",
+                  paddingLeft: "20px",
                 }}
               >
                 <Rate
@@ -321,7 +389,11 @@ function Home() {
                 <p>Based on {dataDummy.review_count} Reviewers</p>
               </Col>
               <Col
-                style={{ paddingRight: "20px", paddingLeft: "20px" }}
+                style={{
+                  paddingRight: "20px",
+                  paddingLeft: "20px",
+                  paddingBottom: "20px",
+                }}
                 span={24}
               >
                 <Text>{dataDummy.location.address1}</Text>
@@ -333,6 +405,30 @@ function Home() {
                 <Text>{dataDummy.location.country}</Text>
                 <br />
                 <Text>{dataDummy.display_phone}</Text>
+                <br />
+                {dataDummy.hours[0]?.open.map((item: any, i: number) => (
+                  <>
+                    {i === 0 ||
+                    item.day !== dataDummy.hours[0]?.open[i - 1]?.day ? (
+                      <>
+                        <Text style={{ fontWeight: 500 }}>
+                          {days[item.day]}
+                        </Text>
+                        <br />
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    {/* Tampilkan data jam buka */}
+                    <Text>
+                      {" "}
+                      {`${item.start.slice(0, 2)}.${item.start.slice(
+                        2,
+                      )} - ${item.end.slice(0, 2)}.${item.end.slice(2)}`}
+                    </Text>
+                    <br />
+                  </>
+                ))}
               </Col>
             </Row>
           </div>

@@ -46,7 +46,7 @@ export default function LocationMarker() {
   shape="circle"
   icon={<AimOutlined />}
   style={{
-    position: "fixed",
+    position: "absolute",
     bottom: 20,
     right: 20,
     zIndex: 9999,
