@@ -5,31 +5,45 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { fetchData } from "../../features/yelpApiSlice/yelpApiSlice"
 
 // antDesign
-import { Row, Col, Space, Progress, Rate, Typography } from "antd"
+import { Row, Col, Space, Progress, Rate, Typography, Button } from "antd"
 const { Text, Title } = Typography
 
 // Leaflet
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 import "leaflet/dist/leaflet.css"
 import Leaflet from "leaflet"
+import 'leaflet-routing-machine';
 
 // components
 import LocationMarker from "../../components/getCurrentLocation"
+import RoutingMachine from "../../components/routingWay"
 
 // icon
 import MarkerIcon from "../../image/markerIcon.png"
+import ShopIcon from "../../image/shop.png"
 import {
   SearchOutlined,
   AimOutlined,
   LaptopOutlined,
   EnvironmentOutlined,
+  CloseOutlined,
 } from "@ant-design/icons"
-export const newicon = new Leaflet.Icon({
+export const BusinessIcon = new Leaflet.Icon({
+  iconUrl: ShopIcon,
+  iconAnchor: [15, 25],
+  popupAnchor: [-2, -20],
+  iconSize: [32, 32],
+  shadowSize: [32, 32 ],
+})
+export const YourLocationicon = new Leaflet.Icon({
   iconUrl: MarkerIcon,
   iconAnchor: [15, 25],
   popupAnchor: [-2, -20],
   iconSize: [25, 25],
 })
+
+// React router dom
+import { useNavigate, Route } from 'react-router-dom';
 
 // dummy data
 export const dataDummy: any = {
@@ -158,22 +172,30 @@ function Home() {
   ) as any
   const id = useAppSelector((state) => state.reducer.detail.id)
 
+    // react router dom
+    const navigate = useNavigate()
+
   useEffect(() => {
     dispacth(fetchData({ endpoint: id, params: {} }))
   }, [])
 
   // console.log(dataDummy.hours[0].open.map((hour: number) => hour))
   // console.log(dataDummy.hours[0].open[1])
-  // console.log(dataDummy.hours[0].is_open_now)
+  // console.log(Leaflet.routing.control())
   return (
     <div style={{ overflowX: "hidden" }}>
-      <Row style={{ margin: "20px" }}>
-        <Col></Col>
-        <Col style={{ display: "flex", justifyContent: "center" }} span={24}>
+      <Row justify="center" align="middle" style={{ margin: "20px" }}>
+        <Col style={{display: "grid"}} span={1}>
+          <Button 
+          onClick={() => {
+                  navigate("/")
+                }} style={{margin: "0px"}} type="primary" icon={<CloseOutlined />}></Button>
+        </Col>
+        <Col style={{ display: "flex", justifyContent: "center" }} span={23}>
           <Title
             style={{
-              alignItems: "center",
-              alignContent: "middle",
+              // alignItems: "center",
+              // alignContent: "middle",
               textAlign: "center",
             }}
           >
@@ -237,6 +259,7 @@ function Home() {
                   borderRadius: "25px",
                 }}
               ></div>
+              
               {/* <img src={dataDummy.photos[0]} alt="Image 2" style={{ width: '100%', height: '300px' }} /> */}
             </Col>
             <Col span={24}>
@@ -305,7 +328,8 @@ function Home() {
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
               width: "100%",
-              height: "516px",
+              minHeight: "516px",
+              height: "100%",
               borderRadius: "25px",
               border: "1px solid",
             }}
@@ -319,6 +343,7 @@ function Home() {
               scrollWheelZoom={false}
               style={{ width: "100%", height: "100%", borderRadius: "25px" }}
             >
+              <RoutingMachine userLat={position[0]} userLong={position[1]} bikeLat={dataDummy.coordinates.latitude} bikeLong={dataDummy.coordinates.longitude} />
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -328,13 +353,16 @@ function Home() {
                   dataDummy.coordinates.latitude,
                   dataDummy.coordinates.longitude,
                 ]}
-                icon={newicon}
+                icon={BusinessIcon}
+                // style={{
+                //   backgroundColor: "white",
+                // }}
               >
                 <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
+                  {dataDummy.name}
                 </Popup>
               </Marker>
-              <Marker position={position} icon={newicon}>
+              <Marker position={position} icon={YourLocationicon}>
                 <Popup>
                   A pretty CSS3 popup. <br /> Easily customizable.
                 </Popup>
@@ -411,7 +439,7 @@ function Home() {
                     {i === 0 ||
                     item.day !== dataDummy.hours[0]?.open[i - 1]?.day ? (
                       <>
-                        <Text style={{ fontWeight: 500 }}>
+                        <Text key={i} style={{ fontWeight: 500 }}>
                           {days[item.day]}
                         </Text>
                         <br />
@@ -420,7 +448,7 @@ function Home() {
                       ""
                     )}
                     {/* Tampilkan data jam buka */}
-                    <Text>
+                    <Text key={i}>
                       {" "}
                       {`${item.start.slice(0, 2)}.${item.start.slice(
                         2,
