@@ -178,6 +178,9 @@ function Home() {
   useEffect(() => {
     dispacth(fetchData({ endpoint: id, params: {} }))
   }, [])
+  // useEffect(() => {
+    
+  // }, [position])
 
   // console.log(dataDummy.hours[0].open.map((hour: number) => hour))
   // console.log(dataDummy.hours[0].open[1])
@@ -435,7 +438,7 @@ function Home() {
                 <Text>{dataDummy.display_phone}</Text>
                 <br />
                 {dataDummy.hours[0]?.open.map((item: any, i: number) => (
-                  <>
+                  <div key={i}>
                     {i === 0 ||
                     item.day !== dataDummy.hours[0]?.open[i - 1]?.day ? (
                       <>
@@ -455,7 +458,7 @@ function Home() {
                       )} - ${item.end.slice(0, 2)}.${item.end.slice(2)}`}
                     </Text>
                     <br />
-                  </>
+                  </div>
                 ))}
               </Col>
             </Row>

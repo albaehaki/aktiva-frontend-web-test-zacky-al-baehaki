@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "leaflet";
 import { createControlComponent } from "@react-leaflet/core";
 import "leaflet-routing-machine";
 import 'lrm-graphhopper'
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 declare var L:any;
 
@@ -15,8 +15,13 @@ import { useAppDispatch, useAppSelector } from "../app/hooks"
 
 const createRoutineMachineLayer = ({ userLat, userLong, bikeLat, bikeLong }: any) => {
   const position = useAppSelector((state) => state.reducer.position)
+
+  useEffect(() => {
+   
+  }, [position])
   
-  const instance = L.Routing.control({
+  
+  const instance =  L.Routing.control({
     waypoints: [
       L.latLng(position[0], position[1]),
       L.latLng(bikeLat, bikeLong)
@@ -45,3 +50,38 @@ const createRoutineMachineLayer = ({ userLat, userLong, bikeLat, bikeLong }: any
 const RoutingMachine = createControlComponent(createRoutineMachineLayer);
 
 export default RoutingMachine;
+
+// import { useEffect } from "react";
+// import L from "leaflet";
+// import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+// import "leaflet-routing-machine";
+// import { useMap } from "react-leaflet";
+
+// // // redux
+// import { useAppDispatch, useAppSelector } from "../app/hooks"
+
+// L.Marker.prototype.options.icon = L.icon({
+//   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
+// });
+
+// export default function Routing({ userLat, userLong, bikeLat, bikeLong }: any) {
+//   const position = useAppSelector((state) => state.reducer.position)
+//   const map = useMap();
+//   const routingControl = () => { L.Routing.control({
+//     waypoints: [
+//             L.latLng(position[0], position[1]),
+//             L.latLng(bikeLat, bikeLong)
+//           ],
+//     routeWhileDragging: false
+//   }).addTo(map)}
+
+//   useEffect(() => {
+//     if (!map) return;
+
+//     routingControl();
+
+//   }, [map]);
+
+//   // return  () => {map.removeControl(routingControl)};
+//   return  null
+// }
